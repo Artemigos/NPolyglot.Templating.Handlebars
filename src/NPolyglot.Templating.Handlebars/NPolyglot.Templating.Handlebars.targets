@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)NPolyglot.Templating.Handlebars.dll" TaskName="HandlebarsTemplating" Condition="Exists('$(MSBuildThisFileDirectory)NPolyglot.Templating.Handlebars.dll')" />
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)bin\$(Configuration)\NPolyglot.Templating.Handlebars.dll" TaskName="HandlebarsTemplating" Condition="!Exists('$(MSBuildThisFileDirectory)NPolyglot.Templating.Handlebars.dll')" />
+
+  <PropertyGroup>
+    <TransformDependsOn>$(TransformDependsOn);HandlebarsTemplate</TransformDependsOn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvailableItemName Include="HandlebarsTemplate" />
+  </ItemGroup>
+
+  <Target Name="HandlebarsTemplate">
+    <HandlebarsTemplating Templates="@(HandlebarsTemplate)"
+                          DslCodeFiles="@(_ParsedDslCode)"
+                          OutputDir="$(DslCodePath)">
+      <Output TaskParameter="GeneratedOutput"
+              ItemName="Compile" />
+    </HandlebarsTemplating>
+  </Target>
+</Project>
